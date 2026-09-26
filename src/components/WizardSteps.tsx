@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CalculatorInputs, ProvinceCode } from '../calculator/types';
-import { ChevronDown, ChevronUp, Settings2, History } from 'lucide-react';
+import { ChevronDown, ChevronUp, Settings2, History, HelpCircle } from 'lucide-react';
 
 interface WizardStepsProps {
   step: number;
@@ -174,16 +174,48 @@ export function WizardSteps({ step, inputs, onChange, onNext, onBack }: WizardSt
             {showAdvanced && (
               <div className="mt-4 space-y-4 p-4 bg-slate-950/50 rounded-xl border border-slate-800">
                 <div className="space-y-2">
-                  <label className="block text-xs font-medium text-slate-400">
-                    Liquidity Factor (default 1.50)
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <label className="block text-xs font-medium text-slate-400">
+                        Liquidity Factor
+                      </label>
+                      <div className="relative group">
+                        <button
+                          type="button"
+                          className="text-slate-500 hover:text-slate-300 focus:outline-none"
+                          aria-label="Liquidity Factor Info"
+                        >
+                          <HelpCircle className="w-3.5 h-3.5" />
+                        </button>
+                        <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block group-focus-within:block w-64 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 shadow-xl z-50 pointer-events-none">
+                          <p className="font-semibold text-white mb-1">What is Liquidity Factor?</p>
+                          <p>
+                            Determines the price a liquidity provider pays for your shares:
+                          </p>
+                          <p className="mt-1 font-mono text-[11px] text-emerald-400 bg-slate-950 p-1 rounded">
+                            Proceeds = Investment ÷ Factor
+                          </p>
+                          <p className="mt-1 text-[11px] text-slate-400">
+                            A factor of <strong>1.50</strong> means you receive ~66.67% of the original purchase price back in cash immediately.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-xs font-mono text-slate-400">
+                      {((1 / (inputs.liquidityFactor ?? 1.50)) * 100).toFixed(1)}% cash back
+                    </span>
+                  </div>
                   <input
                     type="number"
                     step="0.01"
+                    min="1.0"
                     value={inputs.liquidityFactor ?? 1.50}
                     onChange={(e) => onChange({ ...inputs, liquidityFactor: Number(e.target.value) })}
                     className="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-3 text-white text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                   />
+                  <p className="text-[10px] text-slate-500">
+                    Gross Cash Proceeds: ${Math.round(inputs.purchaseAmount / (inputs.liquidityFactor ?? 1.50)).toLocaleString()}
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
