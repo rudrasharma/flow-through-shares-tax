@@ -34,18 +34,9 @@ export function App() {
     setStep(1);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
-      <Header 
-        onReset={handleReset} 
-        onPrint={handlePrint} 
-        viewMode="simple"
-        onViewModeChange={() => {}}
-      />
+      <Header onReset={handleReset} />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center">
         {step === 1 && (
