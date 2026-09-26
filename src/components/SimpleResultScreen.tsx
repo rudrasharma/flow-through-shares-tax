@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FlowThroughOutputs } from '../calculator/types';
+import { CapitalTiedUpTimeline } from './CapitalTiedUpTimeline';
 import { 
   CheckCircle2, 
   ChevronRight, 
@@ -184,6 +185,9 @@ export function SimpleResultScreen({ outputs, onReset, onShowAdvanced }: SimpleR
           </button>
         </div>
       </div>
+
+      {/* Capital At Risk / Tied Up Duration Timeline */}
+      <CapitalTiedUpTimeline outputs={outputs} />
 
       {/* Plain-English FAQ Accordion inspired by Mark McGrath's thread */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4">
