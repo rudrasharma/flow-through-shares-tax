@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { CalculatorInputs, FlowThroughOutputs } from './calculator/types';
 import { calculateFlowThrough, DEFAULT_FEE_RATE, DEFAULT_LIQUIDITY_FACTOR } from './calculator/flowThroughEngine';
 import { Header } from './components/Header';
+import { StepProgressBar } from './components/StepProgressBar';
 import { WizardSteps } from './components/WizardSteps';
 import { SimpleResultScreen } from './components/SimpleResultScreen';
 import { AdvancedMathModal } from './components/AdvancedMathModal';
@@ -38,7 +39,9 @@ export function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
       <Header onReset={handleReset} />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col justify-center">
+        <StepProgressBar currentStep={step} onStepClick={setStep} />
+
         {step === 1 && (
           <WizardSteps 
             step={1} 
