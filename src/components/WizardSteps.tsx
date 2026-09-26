@@ -186,16 +186,53 @@ export function WizardSteps({ step, inputs, onChange, onNext, onBack }: WizardSt
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-xs font-medium text-slate-400">
-                    Legal & Dealer Fee Rate (e.g. 0.102245 for 10.22%)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.0001"
-                    value={inputs.feeRate ?? 0.102245}
-                    onChange={(e) => onChange({ ...inputs, feeRate: Number(e.target.value) })}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-3 text-white text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
-                  />
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-medium text-slate-400">
+                      Legal & Dealer Fee Rate
+                    </label>
+                    <span className="text-xs font-mono text-emerald-400">
+                      {((inputs.feeRate ?? 0.102245) * 100).toFixed(2)}%
+                    </span>
+                  </div>
+
+                  {/* Quick percentage buttons */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {[8, 10, 10.22, 12].map((pct) => {
+                      const isSelected = Math.abs((inputs.feeRate ?? 0.102245) * 100 - pct) < 0.05;
+                      return (
+                        <button
+                          key={pct}
+                          type="button"
+                          onClick={() => onChange({ ...inputs, feeRate: Number((pct / 100).toFixed(6)) })}
+                          className={`py-1.5 px-2 rounded-lg text-xs font-medium border transition-all ${
+                            isSelected
+                              ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                              : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200'
+                          }`}
+                        >
+                          {pct}%
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Percentage number input with % suffix */}
+                  <div className="relative">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="100"
+                      value={Number(((inputs.feeRate ?? 0.102245) * 100).toFixed(4))}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value);
+                        onChange({ ...inputs, feeRate: isNaN(val) ? 0 : Number((val / 100).toFixed(6)) });
+                      }}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 pl-3 pr-8 text-white text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">%</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">Industry standard is ~10.22% (approx. ${Math.round(inputs.purchaseAmount * (inputs.feeRate ?? 0.102245)).toLocaleString()})</p>
                 </div>
               </div>
             )}
